@@ -1,16 +1,17 @@
 {
   "name": "sdp-interop-sl",
   "description": "A simple SDP interoperability layer for Unified Plan/Plan B",
-  "author": {
-    "name": "George Politis",
-    "email": "gp@jitsi.org"
-  },
-  "contributors" : [ { "name": "Robert Taylor", "email": "rob.taylor@starleaf.com" } ],
+  "author": {"name": "Robert Taylor", "email": "rob.taylor@starleaf.com"},
+  "contributors" : [
+    {
+      "name": "George Politis",
+      "email": "gp@jitsi.org"
+    } ],
   "version": "0.2.0",
   "stability": "unstable",
   "repository": {
     "type": "git",
-    "url": "BigFluffyTRex/sdp-interop"
+    "url": "BigFluffyTRex/sdp-interop-sl"
   },
   "keywords": [
     "sdp",
@@ -39,7 +40,7 @@
   },
   "pre-commit": ["lint"],
   "bugs": {
-    "url": "http://github.com/BigFluffyTRex/sdp-interop/issues"
+    "url": "http://github.com/BigFluffyTRex/sdp-interop-sl/issues"
   },
   "license": "Apache-2.0"
 }
