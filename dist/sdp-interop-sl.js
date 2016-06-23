@@ -1041,22 +1041,6 @@ var copyObj = function (obj) {
     return JSON.parse(JSON.stringify(obj));
 };
 
-var getRandomSrrc = function (usedNumbers) {
-    var min = 0;
-    var max = 4294967295;
-    var number = Math.floor(Math.random() * (max - min + 1) + min);
-
-    while (usedNumbers.indexOf(number) > -1) {
-        if (number < max) {
-            number++;
-        } else {
-            number = 0;
-        }
-    }
-    return number;
-};
-
-
 module.exports = function (desc, cache) {
 
     if (typeof desc !== 'object' || desc === null ||
@@ -1117,9 +1101,6 @@ module.exports = function (desc, cache) {
 
     var mLines = [];
 
-
-    var ssrcsInUse = [];
-
     session.media.forEach(function (bLine, index, lines) {
 
         var uLine;
@@ -1134,22 +1115,14 @@ module.exports = function (desc, cache) {
 
         // if we're offering to recv-only on chrome, we won't have any ssrcs at all.
         // In this case we will generate an arbitary fake ssrc;
-        if(!bLine.sources) {
-            if(index > 0) {
+        if (!bLine.sources) {
+            if (index > 0) {
                 var referenceLine = lines[0];
                 var refSources = Object.keys(referenceLine.sources);
-                var refssrc = referenceLine.sources[refSources[0]];
-                var source = {
-                    cname: refssrc.cname,
-                    label: refssrc.label,
-                    msid: refssrc.msid,
-                    mslabel: refssrc.mslabel
-                };
-                ssrc = getRandomSrrc(ssrcsInUse);
-                ssrcsInUse.push(ssrc);
+                ssrc = refSources[0];
                 uLine = copyObj(bLine);
                 uLine.sources = {};
-                uLine.sources[ssrc] = source;
+                uLine.sources[ssrc] = referenceLine.sources[refSources[0]];
                 uLine.mid = uLine.type + "-" + ssrc;
                 mLines.push(uLine);
                 return;
@@ -1159,7 +1132,7 @@ module.exports = function (desc, cache) {
 
         var sources = bLine.sources || null;
 
-        if(!sources) {
+        if (!sources) {
             throw new Error("can't convert to unified plan - each m-line must have an ssrc");
         }
 
@@ -1172,7 +1145,6 @@ module.exports = function (desc, cache) {
         }
         else if (sourcesKeys.length == 1) {
             ssrc = sourcesKeys[0];
-            ssrcsInUse.push(ssrc);
             uLine = copyObj(bLine);
             uLine.mid = uLine.type + "-" + ssrc;
             mLines.push(uLine);
@@ -1184,32 +1156,16 @@ module.exports = function (desc, cache) {
 
 
         ssrcGroups.forEach(function (ssrcGroup) {
-                //update in use ssrcs so we don't accidentally override it
-                ssrcGroup.ssrcs.forEach(function (ssrc) { ssrcsInUse.push(ssrc); });
-                var primary = ssrcGroup.ssrcs[0];
-                //use the first ssrc as the main ssrc for this m-line;
-                var copyLine = copyObj(bLine);
-                copyLine.sources = {};
-                copyLine.sources[primary] = sources[primary];
-                copyLine.mid = copyLine.type + "-" + primary;
-                mLines.push(copyLine);
-            }
-        );
+            //update in use ssrcs so we don't accidentally override it
+            var primary = ssrcGroup.ssrcs[0];
+            //use the first ssrc as the main ssrc for this m-line;
+            var copyLine = copyObj(bLine);
+            copyLine.sources = {};
+            copyLine.sources[primary] = sources[primary];
+            copyLine.mid = copyLine.type + "-" + primary;
+            mLines.push(copyLine);
+        });
     });
-
-    if (remoteRef !== undefined) {
-        remoteRef.media.forEach(function (refline) {
-                if (refline.sources !== undefined) {
-                    var ssrcs = Object.keys(refline.sources);
-                    ssrcs.forEach(function (ssrc) {
-                            ssrcsInUse.push(ssrc);
-                        }
-                    );
-                }
-            }
-        );
-    }
-
 
     if (desc.type === "answer") {
         //if we're answering, if the browser accepted the transformed plan b we passed it,
@@ -1237,12 +1193,6 @@ module.exports = function (desc, cache) {
                         var mline = mLines[i];
                         if (mline.type == type) {
                             var linecopy = copyObj(mline);
-                            var ssrckey = Object.keys(linecopy.sources)[0];
-                            var cname = linecopy.sources[ssrckey].cname;
-                            delete linecopy.sources;
-                            linecopy.sources = {};
-                            var randomssrc = getRandomSrrc(ssrcsInUse);
-                            linecopy.sources[randomssrc] = {'cname': cname};
                             linecopy.mid = mid;
                             linecopy.direction = "recvonly";
                             mLines.push(linecopy);
