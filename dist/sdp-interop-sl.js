@@ -1120,61 +1120,82 @@ module.exports = function (desc, cache) {
 
     var ssrcsInUse = [];
 
-    session.media.forEach(function (bLine) {
-            console.log(JSON.parse(JSON.stringify(bLine)));
-            if ((typeof bLine.rtcpMux !== 'string' ||
-                bLine.rtcpMux !== 'rtcp-mux') &&
-                bLine.direction !== 'inactive') {
-                throw new Error("Cannot convert to Unified Plan because m-lines " +
-                    "without the rtcp-mux attribute were found."
-                );
-            }
+    session.media.forEach(function (bLine, index, lines) {
 
-            //if we're offering to recv-only on chrome, we won't have any ssrcs at all.
-            var sources = {};
-            if (bLine.sources == null) {
-                sources[getRandomSrrc(ssrcsInUse)] = {
+        var uLine;
+        var ssrc;
 
+        if ((typeof bLine.rtcpMux !== 'string' ||
+            bLine.rtcpMux !== 'rtcp-mux') &&
+            bLine.direction !== 'inactive') {
+            throw new Error("Cannot convert to Unified Plan because m-lines " +
+                "without the rtcp-mux attribute were found.");
+        }
+
+        // if we're offering to recv-only on chrome, we won't have any ssrcs at all.
+        // In this case we will generate an arbitary fake ssrc;
+        if(!bLine.sources) {
+            if(index > 0) {
+                var referenceLine = lines[0];
+                var refSources = Object.keys(referenceLine.sources);
+                var refssrc = referenceLine.sources[refSources[0]];
+                var source = {
+                    cname: refssrc.cname,
+                    label: refssrc.label,
+                    msid: refssrc.msid,
+                    mslabel: refssrc.mslabel
                 };
-            } else {
-                sources = bLine.sources;
-            }
-
-            sources = bLine.sources;
-            var ssrcGroups = bLine.ssrcGroups || [];
-            bLine.rtcp.port = bLine.port;
-
-            var sourcesKeys = Object.keys(sources);
-            if (sourcesKeys.length === 0) {
-                return;
-            }
-            else if (sourcesKeys.length == 1) {
-                var ssrc = sourcesKeys[0];
+                ssrc = getRandomSrrc(ssrcsInUse);
                 ssrcsInUse.push(ssrc);
-                var uLine = copyObj(bLine);
+                uLine = copyObj(bLine);
+                uLine.sources = {};
+                uLine.sourcs[fakessrc] = source;
                 uLine.mid = uLine.type + "-" + ssrc;
                 mLines.push(uLine);
                 return;
             }
-            //we might need to split this line
-            delete bLine.sources;
-            delete bLine.ssrcGroups;
-
-
-            ssrcGroups.forEach(function (ssrcGroup) {
-                    //update in use ssrcs so we don't accidentally override it
-                    ssrcGroup.ssrcs.forEach(function (ssrc) { ssrcsInUse.push(ssrc); });
-                    var primary = ssrcGroup.ssrcs[0];
-                    //use the first ssrc as the main ssrc for this m-line;
-                    var copyLine = copyObj(bLine);
-                    copyLine.sources = {};
-                    copyLine.sources[primary] = sources[primary];
-                    copyLine.mid = copyLine.type + "-" + primary;
-                    mLines.push(copyLine);
-                }
-            );
+            throw new Error("failed to guess an ssrc for a recvonly stream");
         }
-    );
+
+        var sources = bLine.sources;
+
+        if(sources == null) {
+            throw new Error("can't convert to unified plan - each m-line must have an ssrc");
+        }
+
+        var ssrcGroups = bLine.ssrcGroups || [];
+        bLine.rtcp.port = bLine.port;
+
+        var sourcesKeys = Object.keys(sources);
+        if (sourcesKeys.length === 0) {
+            return;
+        }
+        else if (sourcesKeys.length == 1) {
+            ssrc = sourcesKeys[0];
+            ssrcsInUse.push(ssrc);
+            uLine = copyObj(bLine);
+            uLine.mid = uLine.type + "-" + ssrc;
+            mLines.push(uLine);
+            return;
+        }
+        //we might need to split this line
+        delete bLine.sources;
+        delete bLine.ssrcGroups;
+
+
+        ssrcGroups.forEach(function (ssrcGroup) {
+                //update in use ssrcs so we don't accidentally override it
+                ssrcGroup.ssrcs.forEach(function (ssrc) { ssrcsInUse.push(ssrc); });
+                var primary = ssrcGroup.ssrcs[0];
+                //use the first ssrc as the main ssrc for this m-line;
+                var copyLine = copyObj(bLine);
+                copyLine.sources = {};
+                copyLine.sources[primary] = sources[primary];
+                copyLine.mid = copyLine.type + "-" + primary;
+                mLines.push(copyLine);
+            }
+        );
+    });
 
     if (remoteRef !== undefined) {
         remoteRef.media.forEach(function (refline) {
