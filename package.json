@@ -1,13 +1,17 @@
 {
-  "name": "sdp-interop-sl",
+  "name": "SdpInterop",
   "description": "A simple SDP interoperability layer for Unified Plan/Plan B",
-  "author": {"name": "Robert Taylor", "email": "rob.taylor@starleaf.com"},
-  "contributors" : [
+  "author": {
+    "name": "Robert Taylor",
+    "email": "rob.taylor@starleaf.com"
+  },
+  "contributors": [
     {
       "name": "George Politis",
       "email": "gp@jitsi.org"
-    } ],
-  "version": "0.2.1",
+    }
+  ],
+  "version": "1.0.1",
   "stability": "unstable",
   "repository": {
     "type": "git",
@@ -20,28 +24,30 @@
     "polyfill"
   ],
   "main": "./lib/",
-  "scripts": {
-    "test": "node test/sdp_interop.js",
-    "coverage":
-      "jscoverage lib && SDP_TRANSFORM_COV=1 nodeunit --reporter=lcov test",
-    "coveralls": "npm run coverage | coveralls",
-    "lint": "./node_modules/.bin/jshint .",
-    "validate": "npm ls"
-  },
   "dependencies": {
     "sdp-transform": "1.5.*"
   },
   "devDependencies": {
     "browserify": "^13.0.1",
-    "coveralls": "^2.11.1",
-    "jscoverage": "^0.5.5",
-    "jshint": "2.8.0",
-    "precommit-hook": "^3.0.0",
-    "qunit-cli": "^0.2.0"
+    "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
+    "gulp-expect-file": "0.0.7",
+    "gulp-header": "^1.8.2",
+    "gulp-util": "^3.0.7",
+    "gulp-rename": "^1.2.2",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   },
-  "pre-commit": ["lint"],
   "bugs": {
     "url": "http://github.com/StarLeafRob/sdp-interop-sl/issues"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "scripts": {
+    "lint": "jshint .",
+    "validate": "npm ls"
+  },
+  "pre-commit": [
+    "lint",
+    "validate",
+    "test"
+  ]
 }

@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.SdpInterop = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /* Copyright @ 2015 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,28 +40,6 @@ module.exports = function arrayEquals(array) {
 
 
 },{}],2:[function(require,module,exports){
-/* Copyright @ 2015 Atlassian Pty Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-module.exports = {
-    InteropFF: require('./interop_on_ff'),
-    InteropChrome: require('./interop_on_chrome')
-};
-
-},{"./interop_on_chrome":3,"./interop_on_ff":4}],3:[function(require,module,exports){
 /**
  * Copyright(c) Starleaf Ltd. 2016.
  */
@@ -100,7 +78,7 @@ var Interop = function () {
 };
 
 module.exports = Interop;
-},{"./on_chrome/to-plan-b":5,"./on_chrome/to-unified-plan":6}],4:[function(require,module,exports){
+},{"./on_chrome/to-plan-b":4,"./on_chrome/to-unified-plan":5}],3:[function(require,module,exports){
 /* Copyright @ 2015 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -848,7 +826,7 @@ Interop.prototype.toUnifiedPlan = function (desc) {
     //#endregion
 };
 
-},{"./array-equals":1,"./transform":7}],5:[function(require,module,exports){
+},{"./array-equals":1,"./transform":6}],4:[function(require,module,exports){
 /**
  * Copyright(c) Starleaf Ltd. 2016.
  */
@@ -1026,7 +1004,7 @@ module.exports = function (desc, cache) {
         sdp: resStr
     });
 };
-},{"../transform":7}],6:[function(require,module,exports){
+},{"../transform":6}],5:[function(require,module,exports){
 /**
  * Copyright(c) Starleaf Ltd. 2016.
  */
@@ -1289,7 +1267,7 @@ module.exports = function (desc, cache) {
         }
     );
 };
-},{"../array-equals":1,"../transform":7}],7:[function(require,module,exports){
+},{"../array-equals":1,"../transform":6}],6:[function(require,module,exports){
 /* Copyright @ 2015 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1403,7 +1381,28 @@ exports.parse = function(sdp) {
 };
 
 
-},{"sdp-transform":9}],8:[function(require,module,exports){
+},{"sdp-transform":9}],7:[function(require,module,exports){
+/* Copyright @ 2015 Atlassian Pty Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+var SdpInterop = module.exports = {
+    InteropFF: require('./interop_on_ff'),
+    InteropChrome: require('./interop_on_chrome')
+};
+
+},{"./interop_on_chrome":2,"./interop_on_ff":3}],8:[function(require,module,exports){
 var grammar = module.exports = {
   v: [{
       name: 'version',
@@ -1883,5 +1882,4 @@ module.exports = function (session, opts) {
   return sdp.join('\r\n') + '\r\n';
 };
 
-},{"./grammar":8}]},{},[2])(2)
-});
+},{"./grammar":8}]},{},[7]);
