@@ -7,11 +7,11 @@
       "name": "George Politis",
       "email": "gp@jitsi.org"
     } ],
-  "version": "0.2.0",
+  "version": "0.2.1",
   "stability": "unstable",
   "repository": {
     "type": "git",
-    "url": "BigFluffyTRex/sdp-interop-sl"
+    "url": "StarLeafRob/sdp-interop-sl"
   },
   "keywords": [
     "sdp",
@@ -40,7 +40,7 @@
   },
   "pre-commit": ["lint"],
   "bugs": {
-    "url": "http://github.com/BigFluffyTRex/sdp-interop-sl/issues"
+    "url": "http://github.com/StarLeafRob/sdp-interop-sl/issues"
   },
   "license": "Apache-2.0"
 }
