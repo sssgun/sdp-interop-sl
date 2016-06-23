@@ -1149,7 +1149,7 @@ module.exports = function (desc, cache) {
                 ssrcsInUse.push(ssrc);
                 uLine = copyObj(bLine);
                 uLine.sources = {};
-                uLine.sourcs[ssrc] = source;
+                uLine.sources[ssrc] = source;
                 uLine.mid = uLine.type + "-" + ssrc;
                 mLines.push(uLine);
                 return;
