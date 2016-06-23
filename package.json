@@ -1,5 +1,6 @@
 {
-  "name": "SdpInterop",
+  "name": "sdp-interop-sl",
+  "title": "SdpInterop",
   "description": "A simple SDP interoperability layer for Unified Plan/Plan B",
   "author": {
     "name": "Robert Taylor",
@@ -23,7 +24,7 @@
     "interoperability",
     "polyfill"
   ],
-  "main": "./lib/",
+  "main": "./lib/SdpInterop.js",
   "dependencies": {
     "sdp-transform": "1.5.*"
   },
