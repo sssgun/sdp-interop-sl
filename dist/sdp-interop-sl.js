@@ -1118,12 +1118,12 @@ module.exports = function (desc, cache) {
         if (!bLine.sources) {
             console.log("no ssrc in m-line - inventing one");
             if (index > 0) {
-                var referenceLine = lines[0];
-                var refSources = Object.keys(referenceLine.sources);
+                //var referenceLine = lines[0];
+                //var refSources = Object.keys(referenceLine.sources);
                 //ssrc = refSources[0];
                 uLine = copyObj(bLine);
                 uLine.sources = {};
-                uLine.sources[1] = referenceLine.sources[refSources[0]];
+                //uLine.sources[1] = referenceLine.sources[refSources[0]];
                 uLine.mid = uLine.type + "-" + 1;
                 mLines.push(uLine);
                 return;
