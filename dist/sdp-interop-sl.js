@@ -16,10 +16,11 @@
 
 var SdpInterop = module.exports = {
     InteropFF: require('./interop_on_ff'),
-    InteropChrome: require('./interop_on_chrome')
+    InteropChrome: require('./interop_on_chrome'),
+    transform: require('./transform')
 };
 
-},{"./interop_on_chrome":3,"./interop_on_ff":4}],2:[function(require,module,exports){
+},{"./interop_on_chrome":3,"./interop_on_ff":4,"./transform":7}],2:[function(require,module,exports){
 /* Copyright @ 2015 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -891,7 +892,7 @@ module.exports = function (desc, cache) {
         uLine.rtp.forEach(function (rtp) {
             if (rtp.codec === 'NULL') {
                 rewrite = true;
-                var offer = transform.parse(cache.offer);
+                var offer = transform.parse(cache.local);
                 rtp.codec = offer.media[i].rtp[0].codec;
             }
         });
