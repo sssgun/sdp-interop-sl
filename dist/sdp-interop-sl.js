@@ -945,6 +945,7 @@ module.exports = function (desc, cache) {
             }
             else {
                 session.media.push(uLine);
+                return;
             }
         }
 
