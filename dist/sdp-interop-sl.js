@@ -943,6 +943,9 @@ module.exports = function (desc, cache) {
                 console.log("dropped munged line: ", JSON.parse(JSON.stringify(uLine)));
                 return;
             }
+            else {
+                session.media.push(uLine);
+            }
         }
 
         if (uLine.type === 'application') {
