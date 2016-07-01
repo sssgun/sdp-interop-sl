@@ -923,27 +923,20 @@ module.exports = function (desc, cache) {
     // Implode the Unified Plan m-lines/tracks into Plan B channels.
     media.forEach(function (uLine, index) {
 
-        // rtcp-mux is required in the Plan B SDP.
-        if ((typeof uLine.rtcpMux !== 'string' ||
-            uLine.rtcpMux !== 'rtcp-mux') &&
-            uLine.direction !== 'inactive') {
-            console.log("missing necessary attributes for plan B conversion", JSON.parse(JSON.stringify(uLine)));
-            return;
-        }
-
         // If we don't have a channel for this uLine.type, then use this
         // uLine as the channel basis.
         if (typeof type2bl[uLine.type] === 'undefined') {
             type2bl[uLine.type] = uLine;
         }
 
-        if (uLine.rtcpMux && uLine.direction === 'inactive' && uLine.port === 0) {
-            console.log("munging disabled line");
+        if (uLine.port === 0) {
             if (index > 1 && uLine.type !== 'data') { //it's a secondary video stream - drop without further ado
-                console.log("dropped munged line: ", JSON.parse(JSON.stringify(uLine)));
                 return;
             }
             else {
+                delete uLine.mid;
+                uLine.mid = uLine.type;
+                //types.push(uLine.type);
                 session.media.push(uLine);
                 return;
             }
@@ -954,8 +947,6 @@ module.exports = function (desc, cache) {
             types.push(uLine.mid);
             return;
         }
-
-
         // Add sources to the channel and handle a=msid.
         if (typeof uLine.sources === 'object') {
             Object.keys(uLine.sources).forEach(function (ssrc) {
@@ -1086,7 +1077,9 @@ module.exports = function (desc, cache) {
     // Make sure this Plan B SDP can be converted to a Unified Plan SDP.
     var bmids = [];
     session.media.forEach(function (m) {
-            bmids.push(m.mid);
+            if(m.port !== 0) { //ignore disabled streams, these can be removed from the bundle
+                bmids.push(m.mid);
+            }
         }
     );
 
@@ -1106,11 +1099,11 @@ module.exports = function (desc, cache) {
         );
     }
 
-    var localRef;
+    var localRef = null;
     if (typeof cache.local !== 'undefined')
         localRef = transform.parse(cache.local);
 
-    var remoteRef;
+    var remoteRef = null;
     if (typeof cache.remote !== 'undefined')
         remoteRef = transform.parse(cache.remote);
 
@@ -1122,11 +1115,20 @@ module.exports = function (desc, cache) {
         var uLine;
         var ssrc;
 
-        if ((typeof bLine.rtcpMux !== 'string' ||
+        /*if ((typeof bLine.rtcpMux !== 'string' ||
             bLine.rtcpMux !== 'rtcp-mux') &&
             bLine.direction !== 'inactive') {
             throw new Error("Cannot convert to Unified Plan because m-lines " +
                 "without the rtcp-mux attribute were found.");
+        }*/
+        if(bLine.port === 0) {
+            // change the mid to the last used mid for this media type, for consistency
+            if(localRef !== null && localRef.media.length > index) {
+                console.log(JSON.parse(JSON.stringify(localRef)));
+                bLine.mid = localRef.media[index].mid;
+            }
+            mLines.push(bLine);
+            return;
         }
 
         // if we're offering to recv-only on chrome, we won't have any ssrcs at all
