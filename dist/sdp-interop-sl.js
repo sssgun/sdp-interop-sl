@@ -1012,26 +1012,6 @@ module.exports = function (desc, cache) {
             // Add the channel to the new media array.
             session.media.push(uLine);
         }
-        else { // add the new streams bandwidth limit to the original
-            if (uLine.bandwidth && uLine.bandwidth.length > 0) {
-                if (!type2bl[uLine.type].bandwidth) {
-                    type2bl[uLine.type].bandwidth = [];
-                }
-
-                uLine.bandwidth.forEach(function(uBandwidth) {
-                    var found1 = false;
-                    type2bl[uLine.type].bandwidth.forEach(function(bBandwidth) {
-                        if (bBandwidth.type === uBandwidth.type) {
-                            found1 = true;
-                            bBandwidth.limit += uBandwidth.limit;
-                        }
-                    });
-                    if (!found1) {
-                        type2bl[uLine.type].bandwidth.push(uBandwidth);
-                    }
-                });
-            }
-        }
     });
 
     // We regenerate the BUNDLE group with the new mids.
