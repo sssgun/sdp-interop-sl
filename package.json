@@ -12,8 +12,8 @@
       "email": "gp@jitsi.org"
     }
   ],
-  "version": "1.4",
-  "stability": "unstable",
+  "version": "1.4.1",
+  "stability": "stable",
   "repository": {
     "type": "git",
     "url": "StarLeafRob/sdp-interop-sl"
