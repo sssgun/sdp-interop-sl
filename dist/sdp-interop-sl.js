@@ -12,6 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Modified by StarLeaf Ltd
  */
 
 var SdpInterop = module.exports = {
@@ -117,6 +119,8 @@ module.exports = Interop;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Modified by StarLeaf Ltd
  */
 
 /* global RTCSessionDescription */
@@ -1290,6 +1294,8 @@ module.exports = function (desc, cache) {
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ *  Modified by StarLeaf Ltd
  */
 
 var transform = require('sdp-transform');
