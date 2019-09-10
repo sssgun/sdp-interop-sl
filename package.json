@@ -31,13 +31,13 @@
   },
   "devDependencies": {
     "browserify": "^13.0.1",
-    "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
-    "gulp-expect-file": "0.0.7",
+    "gulp": "^4.0.2",
+    "gulp-expect-file": "^1.0.1",
+    "gulp-header": "^2.0.9",
     "gulp-jshint": "^2.0.1",
-    "gulp-header": "^1.8.2",
-    "gulp-util": "^3.0.7",
     "gulp-rename": "^1.2.2",
-    "jshint": "^2.9.2",
+    "gulp-util": "^3.0.7",
+    "jshint": "^2.10.2",
     "jshint-stylish": "^2.2.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
