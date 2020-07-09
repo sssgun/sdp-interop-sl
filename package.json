@@ -34,7 +34,7 @@
     "gulp": "^4.0.2",
     "gulp-expect-file": "^1.0.1",
     "gulp-header": "^2.0.9",
-    "gulp-jshint": "^2.0.1",
+    "gulp-jshint": "^2.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.7",
     "jshint": "^2.10.2",
