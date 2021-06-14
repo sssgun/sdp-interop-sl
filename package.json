@@ -30,6 +30,12 @@
     "sdp-transform": "1.5.*"
   },
   "devDependencies": {
+    "glob-parent": ">=5.1.2",
+    "hosted-git-info": ">=2.8.9",
+    "lodash": ">=4.17.21",
+    "y18n": ">=3.2.2",
+    "yargs-parser": ">=5.0.0-security.0",
+    "bl": ">=1.2.3",
     "browserify": "^13.0.1",
     "gulp": "^4.0.2",
     "gulp-expect-file": "^1.0.1",
